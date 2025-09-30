@@ -61,7 +61,7 @@ export default function LoginPage() {
                      disabled:bg-gray-400 disabled:cursor-not-allowed
                      transition-colors"
         >
-          {buttonDisabled ? "Enter details..." : "Login"}
+          {buttonDisabled ? "Enter detaiLLL..." : "Login"}
         </button>
 
         <p className="text-center text-sm text-gray-600 dark:text-gray-300 mt-2">
