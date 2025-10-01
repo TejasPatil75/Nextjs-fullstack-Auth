@@ -36,7 +36,7 @@ export default function RootLayout({
           <ToasterProvider />
 
           {/* 🔹 Page Content */}
-          <main className="flex items-center justify-center min-h-[80vh] p-6">
+          <main className="flex items-center justify-center min-h-screen p-6">
             {children}
           </main>
         </ThemeProvider>
