@@ -33,7 +33,7 @@ export const sendEmail = async ({ email, emailType, userId }: any) => {
     const encodedToken = encodeURIComponent(hashedToken);
 
     const mailOptions = {
-      from: `"Tejas" <${process.env.NODEMAILER_USER}>`,
+      from: `"Auth App" <${process.env.NODEMAILER_USER}>`,
       to: email,
       subject:
         emailType === "VERIFY" ? "Verify your email" : "Reset your password",
