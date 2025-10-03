@@ -3,22 +3,21 @@ import { sendEmail } from "@/helpers/mailer";
 
 export async function POST(request: NextRequest){
     try {
-        const data = await request.json()
-        console.log(data);
-        const id = data._id ;
-        const email = data.email ;
+        const { user , emailType}  = await request.json()
+        console.log(user);
+        const id = user._id ;
+        const email = user.email ;
 
         //send reset password email
-        await sendEmail({email , emailType: "RESET", userId: id})
-        
+        await sendEmail({email , emailType, userId: id})
         
         return NextResponse.json({
-            message: "reset password Email sent " ,
+            message: `${emailType === 'VERIFY' ? "verify user Email sent" : "reset password Email sent" }` ,
             success: true,
         })
 
     } catch (error:any) {
-        console.log("reset password email not sent") ;
+        console.log("Email not sent") ;
         return NextResponse.json({error: error.message} , {status: 500})
         
     }

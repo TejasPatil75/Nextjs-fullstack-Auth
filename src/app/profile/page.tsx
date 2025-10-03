@@ -41,8 +41,21 @@ export default function ProfilePage() {
     try {
       const res = await axios.get("/api/users/me");
       const user = res.data.data;
-      await axios.post("/api/users/profile", user);
+      const emailType = "RESET" ;
+      await axios.post("/api/users/profile", {user, emailType});
       toast.success("Password reset email sent");
+    } catch (error: any) {
+      toast.error(error.message);
+    }
+  };
+
+  const verifyUser = async () => {
+    try {
+      const res = await axios.get("/api/users/me");
+      const user = res.data.data;
+      const emailType = "VERIFY" ;
+      await axios.post("/api/users/profile", {user , emailType});
+      toast.success("Verify user email sent");
     } catch (error: any) {
       toast.error(error.message);
     }
@@ -75,11 +88,19 @@ export default function ProfilePage() {
         </button>
 
         <button
+          onClick={verifyUser}
+          className="bg-violet-600 mt-2 hover:bg-violet-700 text-white font-semibold py-2 rounded transition"
+        >
+          Verify user
+        </button>
+
+        <button
           onClick={resetPassword}
           className="bg-gray-600 mt-2 hover:bg-gray-700 text-white font-semibold py-2 rounded transition"
         >
           Reset Password
         </button>
+        
       </div>
     </AuthCard>
   );

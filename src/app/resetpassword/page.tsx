@@ -17,56 +17,65 @@ export default function ResetPasswordPage() {
   const resetPasswordEmail = async () => {
     try {
       setLoading(true);
+      // The token state already holds the decoded token
       await axios.post("/api/users/resetpassword", { token, password });
       setVerified(true);
+      setError(false);
       toast.success("Password changed successfully!");
     } catch (error: any) {
       setError(true);
-      toast.error(error.message);
+      toast.error(error.response?.data?.error || "An unknown error occurred.");
     } finally {
       setLoading(false);
     }
   };
 
+  // FIX: Use URLSearchParams and decodeURIComponent for a robust token
   useEffect(() => {
-    const urlToken = window.location.search.split("=")[1];
-    setToken(urlToken || "");
+    const urlParams = new URLSearchParams(window.location.search);
+    const urlToken = urlParams.get('token');
+    if (urlToken) {
+        setToken(decodeURIComponent(urlToken));
+    }
   }, []);
 
   useEffect(() => {
-    setButtonDisabled(password.length === 0);
-  }, [password]);
+    setButtonDisabled(password.length === 0 || loading);
+  }, [password, loading]);
 
   return (
     <AuthCard title={loading ? "Processing..." : "Reset Password"}>
       <h2 className="p-2 mb-4 rounded bg-orange-500 text-black">
-        {token ? "valid token" : "No token provided"}
+        {token ? "Token Valid" : "No token provided"}
       </h2>
 
-      <div className="flex flex-col gap-3">
-        <label className="text-sm font-medium text-gray-700 dark:text-gray-300">
-          New Password
-        </label>
-        <input
-          className="px-3 py-2 rounded-lg bg-white dark:bg-black border border-gray-300 dark:border-gray-700 
-                     focus:outline-none focus:ring-2 focus:ring-indigo-500"
-          type="password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          placeholder="Enter new password"
-        />
+      {/* Hide the form if the process is successful */}
+      {!verified && (
+        <div className="flex flex-col gap-3">
+          <label className="text-sm font-medium text-gray-700 dark:text-gray-300">
+            New Password
+          </label>
+          <input
+            className="px-3 py-2 rounded-lg bg-white dark:bg-black border border-gray-300 dark:border-gray-700 
+                       focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            placeholder="Enter new password"
+          />
 
-        <button
-          onClick={resetPasswordEmail}
-          disabled={buttonDisabled}
-          className="w-full py-2 mt-2 rounded-lg font-semibold 
-                     bg-indigo-600 text-white hover:bg-indigo-700 
-                     disabled:bg-gray-400 disabled:cursor-not-allowed
-                     transition-colors"
-        >
-          {buttonDisabled ? "Enter password..." : "Reset Password"}
-        </button>
-      </div>
+          <button
+            onClick={resetPasswordEmail}
+            disabled={buttonDisabled}
+            className="w-full py-2 mt-2 rounded-lg font-semibold 
+                       bg-indigo-600 text-white hover:bg-indigo-700 
+                       disabled:bg-gray-400 disabled:cursor-not-allowed
+                       transition-colors"
+          >
+            {loading ? "Resetting..." : "Reset Password"}
+          </button>
+        </div>
+      )}
 
       {verified && (
         <div className="flex flex-col gap-3 items-center mt-4">
@@ -81,7 +90,7 @@ export default function ResetPasswordPage() {
       )}
 
       {error && (
-        <h2 className="text-lg font-semibold bg-red-500 text-white p-2 rounded mt-4">
+        <h2 className="text-lg font-semibold bg-red-500 text-white p-2 rounded mt-4 text-center">
           ❌ Error updating password
         </h2>
       )}
