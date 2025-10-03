@@ -1,36 +1,143 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+````markdown
+# Next.js Full-Stack Authentication System
 
-## Getting Started
+Welcome to the **Next.js Full-Stack Authentication System**!  
+This project is a complete, modern authentication solution built with **Next.js**, **TypeScript**, and **MongoDB**. It includes user registration, login, JWT-based session management, email verification, and password reset functionality — all with a sleek UI and dark mode support.
 
-First, run the development server:
+---
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+## ✨ Features
+
+- **Secure User Authentication**: Signup, login, and logout with hashed passwords (`bcryptjs`) and JWT sessions.  
+- **JWT-based Sessions**: Uses HTTP-only cookies for secure, stateless authentication.  
+- **Protected Routes**: Middleware ensures only authenticated users can access restricted pages.  
+- **Email Verification**: Users verify their accounts via email links.  
+- **Forgot/Reset Password**: Secure flow for password reset using tokenized email links.  
+- **Modern UI/UX**:  
+  - Built with **Tailwind CSS** for responsive design.  
+  - **Framer Motion** animations and smooth transitions.  
+  - **React Hot Toast** for user-friendly notifications.  
+  - **Dark/Light Mode** toggle.  
+- **Full-Stack Solution**: Next.js App Router for frontend & backend.  
+- **Database Integration**: **Mongoose** with **MongoDB** for persistence.  
+
+---
+
+## 🛠️ Tech Stack
+
+- **Framework**: [Next.js](https://nextjs.org/)  
+- **Language**: [TypeScript](https://www.typescriptlang.org/)  
+- **Database**: [MongoDB](https://www.mongodb.com/) + [Mongoose](https://mongoosejs.com/)  
+- **Authentication**: [JWT](https://jwt.io/), [bcryptjs](https://www.npmjs.com/package/bcryptjs)  
+- **Styling**: [Tailwind CSS](https://tailwindcss.com/)  
+- **Animations**: [Framer Motion](https://www.framer.com/motion/)  
+- **Notifications**: [React Hot Toast](https://react-hot-toast.com/)  
+- **Emailing**: [Nodemailer](https://nodemailer.com/)  
+- **API**: Next.js API Routes  
+
+---
+
+## 🚀 Getting Started
+
+### Prerequisites
+- [Node.js](https://nodejs.org/) v20+  
+- [MongoDB](https://www.mongodb.com/) (local or Atlas cloud)  
+- SMTP service (e.g., Gmail with App Password)  
+
+### Installation
+
+1. **Clone the repository**
+   ```bash
+   git clone https://github.com/tejaspatil75/nextjs-fullstack-auth.git
+   cd nextjs-fullstack-auth
+````
+
+2. **Install dependencies**
+
+   ```bash
+   npm install
+   ```
+
+3. **Set up environment variables**
+   Create `.env.local` in the root directory:
+
+   ```env
+   # MongoDB Connection
+   MONGO_URI=your_mongodb_connection_string
+
+   # JWT Secret
+   TOKEN_SECRET=yoursupersecretkeythatislongandrandom
+
+   # App domain (for email links)
+   DOMAIN=http://localhost:3000
+
+   # Nodemailer config (Gmail example)
+   NODEMAILER_HOST=smtp.gmail.com
+   NODEMAILER_PORT=465
+   NODEMAILER_USER=your-email@gmail.com
+   NODEMAILER_PASS=your_gmail_app_password
+   ```
+
+   > **Note**: For Gmail, generate an [App Password](https://support.google.com/accounts/answer/185833).
+
+4. **Run the dev server**
+
+   ```bash
+   npm run dev
+   ```
+
+   Visit [http://localhost:3000](http://localhost:3000) to preview.
+
+---
+
+## 📁 Project Structure
+
+```
+src/
+├── app/
+│   ├── api/          # Authentication API routes
+│   ├── (pages)/      # Frontend pages (Login, Signup, Profile, etc.)
+│   ├── layout.tsx    # Global layout with theme + toaster
+│   └── globals.css   # Tailwind global styles
+├── components/       # Reusable UI components
+├── dbConfig/         # MongoDB config
+├── helpers/          # Utilities (JWT, mail handling, etc.)
+├── middleware.ts     # Protect routes using JWT
+└── models/           # Mongoose schemas
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+---
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## ⛓️ API Endpoints
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+| Method | Endpoint                   | Description                                  |
+| ------ | -------------------------- | -------------------------------------------- |
+| `POST` | `/api/users/signup`        | Register new user                            |
+| `POST` | `/api/users/login`         | Authenticate user & set JWT cookie           |
+| `GET`  | `/api/users/logout`        | Logout by clearing cookie                    |
+| `GET`  | `/api/users/me`            | Get logged-in user's details                 |
+| `POST` | `/api/users/verifyemail`   | Verify account via email token               |
+| `POST` | `/api/users/resetpassword` | Reset password via token                     |
+| `POST` | `/api/users/profile`       | Helper for sending verification/reset emails |
 
-## Learn More
+---
 
-To learn more about Next.js, take a look at the following resources:
+## ☁️ Deployment
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+The easiest deployment option is [Vercel](https://vercel.com/).
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+* Push code to GitHub/GitLab/Bitbucket.
+* Import repo into Vercel.
+* Add environment variables in **Vercel Project Settings**.
 
-## Deploy on Vercel
+For more info: [Next.js Deployment Docs](https://nextjs.org/docs/app/building-your-application/deploying).
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+---
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## 📜 License
+
+This project is licensed under the MIT License.
+Feel free to fork and customize! 🚀
+
+```
+```
