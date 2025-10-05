@@ -4,16 +4,14 @@ import axios from "axios";
 import Link from "next/link";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import AuthCard from "@/components/AuthCard";
 
 export default function ProfilePage() {
   const router = useRouter();
 
-  const [id, setId] = useState("nothing");
-  const [username, setUsername] = useState("user");
-  const [email, setEmail] = useState("email");
-  const [verified, setVerified] = useState(false);
+  const [user , setUser] = useState({})
+  const [loading, setLoading] = useState(true) ;
 
   const logout = async () => {
     try {
@@ -28,19 +26,18 @@ export default function ProfilePage() {
   const getUserDetails = async () => {
     try {
       const res = await axios.get("/api/users/me");
-      setId(res.data.data._id);
-      setUsername(res.data.data.username);
-      setEmail(res.data.data.email);
-      setVerified(res.data.data.isVerified);
+      setUser(res.data.data) ;
+  
     } catch (error: any) {
       toast.error("Failed to fetch details");
+    }
+    finally{
+      setLoading(false)
     }
   };
 
   const resetPassword = async () => {
     try {
-      const res = await axios.get("/api/users/me");
-      const user = res.data.data;
       const emailType = "RESET" ;
       await axios.post("/api/users/profile", {user, emailType});
       toast.success("Password reset email sent");
@@ -51,8 +48,6 @@ export default function ProfilePage() {
 
   const verifyUser = async () => {
     try {
-      const res = await axios.get("/api/users/me");
-      const user = res.data.data;
       const emailType = "VERIFY" ;
       await axios.post("/api/users/profile", {user , emailType});
       toast.success("Verify user email sent");
@@ -61,35 +56,34 @@ export default function ProfilePage() {
     }
   };
 
+  useEffect(() => {
+      getUserDetails() ;
+
+  }, [])
+  
+  if(loading) {
+    return (
+      <AuthCard title="Profile">
+      <p>Loading your profile...</p>
+      </AuthCard>
+    )
+  }
+
   return (
     <AuthCard title="Profile">
       <div className="flex flex-col gap-4">
-        <h2 className="p-2 rounded bg-green-500 text-white">
-          {id === "nothing" ? "Nothing" : <Link href={`/profile/${id}`}>UserId: {id}</Link>}
+        <h2 className="p-2 rounded border-gray-600 border-2 text-white">
+          <Link href={`/profile/${user._id}`}>UserId: {user._id}</Link>
         </h2>
-        <h2 className="p-2 rounded bg-green-500 text-white">Username: {username}</h2>
-        <h2 className="p-2 rounded bg-green-500 text-white">Email: {email}</h2>
-        <h2 className="p-2 rounded bg-green-500 text-white">
-          Verified: {verified ? "✅ Yes" : "❌ No"}
+        <h2 className="p-2 rounded  border-gray-600 border-2 text-white">Username: {user.username}</h2>
+        <h2 className="p-2 rounded  border-gray-600 border-2 text-white">Email: {user.email}</h2>
+        <h2 className="p-2 rounded  border-gray-600 border-2 text-white">
+          Verified: {user.isVerified ? "✅ Yes" : "❌ No"}
         </h2>
-
-        <button
-          onClick={logout}
-          className="bg-blue-600 mt-4 hover:bg-blue-700 text-white font-semibold py-2 rounded transition"
-        >
-          Logout
-        </button>
-
-        <button
-          onClick={getUserDetails}
-          className="bg-purple-600 mt-2 hover:bg-purple-700 text-white font-semibold py-2 rounded transition"
-        >
-          Get User Details
-        </button>
 
         <button
           onClick={verifyUser}
-          className="bg-violet-600 mt-2 hover:bg-violet-700 text-white font-semibold py-2 rounded transition"
+          className="bg-purple-600 mt-4 hover:bg-purple-700 text-white font-semibold py-2 rounded transition"
         >
           Verify user
         </button>
@@ -99,6 +93,13 @@ export default function ProfilePage() {
           className="bg-gray-600 mt-2 hover:bg-gray-700 text-white font-semibold py-2 rounded transition"
         >
           Reset Password
+        </button>
+
+        <button
+          onClick={logout}
+          className="bg-blue-600 mt-2 hover:bg-blue-700 text-white font-semibold py-2 rounded transition"
+        >
+          Logout
         </button>
         
       </div>

@@ -5,7 +5,7 @@ export default function AuthCard({ title, children }: { title: string; children:
     <div
       className="w-full max-w-md mx-auto 
         bg-white/30 dark:bg-black/30 
-        backdrop-blur-xl shadow-2xl 
+        backdrop-blur-xl shadow-sm shadow-amber-200 
         border border-white/20 dark:border-white/10 
         rounded-2xl p-8 animate-fade-in"
     >
